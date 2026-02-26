@@ -1,5 +1,5 @@
 {
-  "name": "Remix: Astro 3D playground",
-  "description": "Demo of 3D play",
+  "name": "AstroMotion 3D",
+  "description": "A high-fidelity 3D interactive playground using R3F and Framer Motion 3D.",
   "requestFramePermissions": []
 }

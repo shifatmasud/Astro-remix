@@ -84,6 +84,10 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
     padding: theme.spacing['Space.XS'],
   };
 
+  const MotionButton = motion.button as any;
+  const MotionI = motion.i as any;
+  const MotionDiv = motion.div as any;
+
   return (
     <div style={{ position: 'relative' }} onPointerDown={(e) => e.stopPropagation()}>
       <label style={{ ...theme.Type.Readable.Label.S, display: 'block', marginBottom: theme.spacing['Space.S'], color: theme.Color.Base.Content[2] }}>
@@ -91,7 +95,7 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
       </label>
       
       {/* Trigger Button */}
-      <motion.button
+      <MotionButton
         ref={triggerRef}
         style={triggerStyle}
         onClick={() => setIsOpen(!isOpen)}
@@ -99,16 +103,16 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
         type="button"
       >
         <span>{currentLabel}</span>
-        <motion.i 
+        <MotionI 
             className="ph-bold ph-caret-down" 
             animate={{ rotate: isOpen ? 180 : 0 }}
         />
-      </motion.button>
+      </MotionButton>
 
       {/* Dropdown Menu Portal */}
       {isOpen && ReactDOM.createPortal(
         <AnimatePresence>
-          <motion.div
+          <MotionDiv
             ref={dropdownRef}
             style={{...dropdownStyle, top: position.top, left: position.left, width: position.width}}
             initial={{ opacity: 0, y: -10, scaleY: 0.9 }}
@@ -117,7 +121,7 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
             transition={{ duration: 0.15 }}
           >
             {options.map((option) => (
-              <motion.div
+              <MotionDiv
                 key={option.value}
                 onClick={() => handleSelect(option.value)}
                 style={{

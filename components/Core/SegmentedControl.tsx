@@ -50,12 +50,14 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({ items, activeId, on
     zIndex: 1,
   };
 
+  const MotionDiv = motion.div as any;
+
   return (
     <div style={containerStyle}>
       {items.map((item) => {
         const isActive = item.id === activeId;
         return (
-          <motion.div
+          <MotionDiv
             key={item.id}
             style={itemStyle}
             onClick={() => onSelect(item.id)}

@@ -33,7 +33,7 @@ interface ControlPanelProps {
   layerSpacing: MotionValue<number>;
   viewRotateX: MotionValue<number>;
   viewRotateZ: MotionValue<number>;
-  uiMode: 'default' | 'lean';
+  isLeanMode: boolean;
     onToggleUIMode: () => void;
   showThemeToggle: boolean;
   onToggleThemeButton: () => void;
@@ -61,7 +61,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   layerSpacing,
   viewRotateX,
   viewRotateZ,
-  uiMode,
+  isLeanMode,
     onToggleUIMode,
   showThemeToggle,
   onToggleThemeButton,
@@ -105,7 +105,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                 <div style={{ display: 'flex', flexDirection: 'column', gap: theme.spacing['Space.M'] }}>
           <Toggle
             label="Lean UI Mode"
-            isOn={uiMode === 'lean'}
+            isOn={isLeanMode}
             onToggle={onToggleUIMode}
           />
           <Toggle

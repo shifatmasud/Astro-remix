@@ -21,7 +21,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 
 
-const ErrorFallback = ({ error }: { error: Error }) => {
+import { FallbackProps } from 'react-error-boundary';
+
+const ErrorFallback = ({ error }: FallbackProps) => {
   const { theme } = useTheme();
   return (
     <div style={{
@@ -104,14 +106,14 @@ const DimensionLine = ({
     if (position === 'left' || position === 'right') tx = TICK_SIZE;
 
     const style: React.CSSProperties = {
-        ...theme.Type.Expressive.Data,
+        ...theme.Type.Expressive.Headline.S,
         fontSize: '10px',
         fill: color,
         textAnchor: 'middle',
         dominantBaseline: 'middle',
         fontWeight: 500,
         letterSpacing: '0.05em',
-        pointerEvents: 'none',
+        pointerEvents: 'none' as const,
     };
     
     const bgStyle: React.CSSProperties = {
@@ -372,18 +374,52 @@ const Stage: React.FC<StageProps> = ({
         position: 'relative', 
         width: '100%',
         height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        perspective: '1000px',
+        overflow: 'hidden',
     }}>
-      <Canvas>
-        <Suspense fallback={null}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <Character characterState={characterState} onColorChange={onColorChange} />
-          <OrbitControls enablePan={false} enableZoom={false} />
-          <Plane args={[100, 100]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]}>
-            <meshStandardMaterial color="#444" />
-          </Plane>
-        </Suspense>
-      </Canvas>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+        <Canvas>
+            <Suspense fallback={null}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <Character characterState={characterState} onColorChange={onColorChange} />
+            <OrbitControls enablePan={false} enableZoom={false} />
+            <Plane args={[100, 100]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]}>
+                <meshStandardMaterial color={theme.Color.Base.Surface[3]} />
+            </Plane>
+            </Suspense>
+        </Canvas>
+      </div>
+
+      <motion.div
+        style={{
+            position: 'relative',
+            zIndex: 1,
+            rotateX: viewRotateX,
+            rotateZ: containerRotateZ,
+            transformStyle: 'preserve-3d',
+        }}
+      >
+        <AnimatePresence>
+            {view3D && <LayerStackHUD layerSpacing={layerSpacing} isCard={btnProps.componentType === 'card'} />}
+        </AnimatePresence>
+
+        <div ref={componentRef} style={{ position: 'relative', transformStyle: 'preserve-3d' }}>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                {btnProps.componentType === 'card' ? (
+                    <Card {...btnProps} />
+                ) : (
+                    <Button {...btnProps} onClick={onButtonClick} />
+                )}
+            </ErrorBoundary>
+
+            {showMeasurements && anatomy && <BlueprintOverlay anatomy={anatomy} />}
+            {showTokens && anatomy && <TokenOverlay anatomy={anatomy} btnProps={btnProps} />}
+        </div>
+      </motion.div>
     </div>
   );
 };

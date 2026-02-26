@@ -47,8 +47,11 @@ const ThemeToggleButton = () => {
     }
   };
 
+  const MotionButton = motion.button as any;
+  const MotionSpan = motion.span as any;
+
   return (
-    <motion.button
+    <MotionButton
       style={styles.button}
       onClick={toggleTheme}
       aria-label={`Switch to ${themeName === 'light' ? 'dark' : 'light'} mode`}
@@ -60,7 +63,7 @@ const ThemeToggleButton = () => {
       transition={{ duration: 0.2 }}
     >
       <AnimatePresence mode="wait" initial={false}>
-        <motion.span
+        <MotionSpan
           key={themeName}
           className={themeName === 'dark' ? 'ph-bold ph-moon' : 'ph-bold ph-sun'}
           style={styles.icon}
@@ -71,7 +74,7 @@ const ThemeToggleButton = () => {
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         />
       </AnimatePresence>
-    </motion.button>
+    </MotionButton>
   );
 };
 

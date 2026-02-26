@@ -7,7 +7,7 @@ interface TabbedPanelProps {
   panels: {
     id: string;
     title: string;
-    icon?: React.ReactNode;
+    icon: React.ReactNode;
     content: React.ReactNode;
   }[];
 }

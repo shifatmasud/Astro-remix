@@ -2,15 +2,31 @@ import React, { useRef } from 'react';
 import { Box, Capsule } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { motion } from 'framer-motion-3d';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 
-export const Character = ({ characterState }) => {
+export const Character = ({ characterState, onColorChange }: { characterState: { x: number; y: number; jump: boolean; color: string }, onColorChange: (color: string) => void }) => {
   const characterRef = useRef<THREE.Group>(null);
   const bodyRef = useRef<THREE.Group>(null);
   const backpackRef = useRef<THREE.Group>(null);
   const flameRef = useRef<THREE.Group>(null);
   const leftLegRef = useRef<THREE.Group>(null);
   const rightLegRef = useRef<THREE.Group>(null);
+
+  useGSAP(() => {
+    const flame = flameRef.current;
+    if (!flame) return;
+
+    gsap.killTweensOf(flame.scale);
+
+    if (characterState.jump) {
+      gsap.timeline()
+        .to(flame.scale, { x: 1, y: 1, z: 1, duration: 0.2, ease: 'power2.out' })
+        .to(flame.scale, { y: 1.2, duration: 0.5, repeat: -1, yoyo: true, ease: 'sine.inOut' }, ">");
+    } else {
+      gsap.to(flame.scale, { x: 0, y: 0, z: 0, duration: 0.2, ease: 'power2.in' });
+    }
+  }, [characterState.jump]);
   
   const pos = useRef({ x: 0, y: 0, z: 0 });
   const velocity = useRef({ x: 0, y: 0, z: 0 });
@@ -102,17 +118,10 @@ export const Character = ({ characterState }) => {
                   <meshStandardMaterial color={bodyColor} />
                 </Box>
                 {/* Jetpack Flame */}
-                <motion.group 
+                <group 
                   ref={flameRef} 
                   position={[0, -0.2, -0.3]} 
-                  animate={{
-                    scale: characterState.jump ? [1, 1.2, 1] : 0,
-                    opacity: characterState.jump ? [1, 0.8, 1] : 0,
-                  }}
-                  transition={{
-                    scale: { repeat: Infinity, duration: 0.5 },
-                    opacity: { repeat: Infinity, duration: 0.3 },
-                  }}
+                  scale={0} // Start scaled down
                 >
                     <Box args={[0.15, 0.3, 0.15]} position={[0, -0.15, 0]}>
                         <meshBasicMaterial color="#fbbf24" />
@@ -120,7 +129,7 @@ export const Character = ({ characterState }) => {
                     <Box args={[0.1, 0.2, 0.1]} position={[0, -0.25, 0]}>
                         <meshBasicMaterial color="#ef4444" />
                     </Box>
-                </motion.group>
+                </group>
             </group>
 
             {/* Visor */}

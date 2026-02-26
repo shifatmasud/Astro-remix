@@ -198,6 +198,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, onChange, onCom
   const satGradient = `linear-gradient(to right, ${HSLToHex(hsl.h, 0, hsl.l)}, ${HSLToHex(hsl.h, 100, hsl.l)})`;
   const lightGradient = `linear-gradient(to right, #000, ${HSLToHex(hsl.h, hsl.s, 50)}, #fff)`;
 
+  const MotionDiv = motion.div as any;
+  const MotionButton = motion.button as any;
+
   return (
     <div ref={triggerRef} style={{ position: 'relative', ...style }} onPointerDown={(e) => e.stopPropagation()}>
       <label style={{ ...theme.Type.Readable.Label.S, display: 'block', marginBottom: theme.spacing['Space.S'], color: theme.Color.Base.Content[2] }}>
@@ -205,7 +208,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, onChange, onCom
       </label>
       
       <div style={{ display: 'flex', gap: theme.spacing['Space.S'] }}>
-        <motion.div 
+        <MotionDiv 
             style={swatchStyle} 
             onClick={handleToggle}
             whileHover={{ scale: 1.05 }}
@@ -231,19 +234,19 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, onChange, onCom
                 onClick={() => setIsOpen(false)} 
               />
               
-              <motion.div
+              <MotionDiv
                 ref={popoverRef}
                 style={popoverStyle}
                 initial={{ opacity: 0, y: '-95%', scale: 0.95 }}
                 animate={{ opacity: 1, y: '-100%', scale: 1 }}
                 exit={{ opacity: 0, y: '-95%', scale: 0.95 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                onPointerDown={(e) => e.stopPropagation()}
+                onPointerDown={(e: any) => e.stopPropagation()}
               >
                 {/* Presets Grid */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px', marginBottom: '16px' }}>
                     {presets.map((color) => (
-                        <motion.button
+                        <MotionButton
                             key={color}
                             onClick={() => handlePresetClick(color)}
                             style={{

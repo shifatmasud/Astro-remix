@@ -21,7 +21,6 @@ import Confetti from '../Core/Confetti.tsx';
 import { Sliders, Code, Terminal } from 'phosphor-react';
 import Thumbstick from '../Core/Thumbstick';
 import JumpButton from '../Core/JumpButton';
-import Customization from './Customization';
 import { WindowId, WindowState, LogEntry, MetaButtonProps } from '../../types/index.tsx';
 
 /**
@@ -252,6 +251,10 @@ const MetaPrototype = () => {
     localStorage.setItem('geminiApiKey', key);
     logEvent('Gemini API Key saved.');
   };
+
+  const handleToggleUIMode = () => {
+    setUiMode(prev => (prev === 'default' ? 'lean' : 'default'));
+  };
   
   const handleStageButtonClick = () => {
     logEvent('Component Interacted! (Triggered Action)');
@@ -324,8 +327,8 @@ const MetaPrototype = () => {
                 layerSpacing={layerSpacing}
                 viewRotateX={viewRotateX}
                 viewRotateZ={viewRotateZ}
-                uiMode={uiMode}
-                onToggleUIMode={() => setUiMode(uiMode === 'default' ? 'lean' : 'default')}
+                isLeanMode={true}
+                onToggleUIMode={handleToggleUIMode}
                 showThemeToggle={showThemeToggle}
                 onToggleThemeButton={() => setShowThemeToggle(!showThemeToggle)}
                 isAIControlEnabled={isAIControlEnabled}
@@ -416,10 +419,9 @@ const MetaPrototype = () => {
       {uiMode === 'default' ? (
         <Dock windows={windows} toggleWindow={toggleWindow} />
       ) : (
-        <Dock windows={{ settings: { id: 'settings', title: 'Settings', isOpen: windows.control.isOpen, zIndex: 1, x: 0, y: 0, height: 600 } }} toggleWindow={() => toggleWindow('control')} />
+        <Dock windows={windows} toggleWindow={toggleWindow} />
       )}
 
-      <Customization onColorChange={(color) => setCharacterState(prev => ({ ...prev, color }))} />
       <div style={styles.controlsContainer}>
         <Thumbstick onMove={(x, y) => setCharacterState(prev => ({ ...prev, x, y }))} />
         <JumpButton onJump={() => setCharacterState(prev => ({ ...prev, jump: true }))} onJumpEnd={() => setCharacterState(prev => ({ ...prev, jump: false }))} />
@@ -442,7 +444,7 @@ const MetaPrototype = () => {
                 onToggleStyles={() => toggleWindow('styles')}
                 showSystemSpec={windows.systemSpec.isOpen}
                 onToggleSystemSpec={() => toggleWindow('systemSpec')}
-                view3D={view3D} onToggleView3D={() => setView3D(!view3D)} layerSpacing={layerSpacing} viewRotateX={viewRotateX} viewRotateZ={viewRotateZ} uiMode={uiMode} onToggleUIMode={() => setUiMode(uiMode === 'default' ? 'lean' : 'default')}
+                view3D={view3D} onToggleView3D={() => setView3D(!view3D)} layerSpacing={layerSpacing} viewRotateX={viewRotateX} viewRotateZ={viewRotateZ} isLeanMode={true} onToggleUIMode={handleToggleUIMode}
                 showThemeToggle={showThemeToggle}
                 onToggleThemeButton={() => setShowThemeToggle(!showThemeToggle)}
                 isAIControlEnabled={isAIControlEnabled}
@@ -459,7 +461,7 @@ const MetaPrototype = () => {
   );
 };
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   controlsContainer: {
     position: 'absolute',
     bottom: '20px',

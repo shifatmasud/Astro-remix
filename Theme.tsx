@@ -79,6 +79,7 @@ const typography = {
         M: { fontSize: '12px', lineHeight: '16px', fontWeight: 500, letterSpacing: '0.02em', tag: 'span', fontFamily: "'Inter', sans-serif" },
         S: { fontSize: '11px', lineHeight: '16px', fontWeight: 500, letterSpacing: '0.02em', tag: 'span', fontFamily: "'Inter', sans-serif" },
       },
+      Data: { fontSize: '12px', lineHeight: 1.5, fontWeight: 400, letterSpacing: '0.03em', tag: 'code', fontFamily: "'Victor Mono', monospace" },
     }
   }
 };
