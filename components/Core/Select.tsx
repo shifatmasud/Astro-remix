@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../Theme.tsx';
 import useOutsideClick from '../../hooks/useOutsideClick.ts';
 
+const MotionDiv = motion.div;
+
 interface SelectProps {
   label: string;
   value: string;
@@ -84,10 +86,6 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
     padding: theme.spacing['Space.XS'],
   };
 
-  const MotionButton = motion.button as any;
-  const MotionI = motion.i as any;
-  const MotionDiv = motion.div as any;
-
   return (
     <div style={{ position: 'relative' }} onPointerDown={(e) => e.stopPropagation()}>
       <label style={{ ...theme.Type.Readable.Label.S, display: 'block', marginBottom: theme.spacing['Space.S'], color: theme.Color.Base.Content[2] }}>
@@ -95,7 +93,7 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
       </label>
       
       {/* Trigger Button */}
-      <MotionButton
+      <motion.button
         ref={triggerRef}
         style={triggerStyle}
         onClick={() => setIsOpen(!isOpen)}
@@ -103,11 +101,11 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
         type="button"
       >
         <span>{currentLabel}</span>
-        <MotionI 
+        <motion.i 
             className="ph-bold ph-caret-down" 
             animate={{ rotate: isOpen ? 180 : 0 }}
         />
-      </MotionButton>
+      </motion.button>
 
       {/* Dropdown Menu Portal */}
       {isOpen && ReactDOM.createPortal(
@@ -143,9 +141,9 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, style 
               >
                 {option.label}
                 {option.value === value && <i className="ph-bold ph-check" />}
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </AnimatePresence>,
         document.body
       )}
