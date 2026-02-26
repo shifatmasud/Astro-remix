@@ -14,10 +14,8 @@ interface DockIconProps {
 
 const DockIcon: React.FC<DockIconProps> = ({ icon, isActive, onClick }) => {
   const { theme } = useTheme();
-  const MotionButton = motion.button as any;
-
   return (
-    <MotionButton
+    <motion.button
       onClick={onClick}
       style={{
         width: '48px',
