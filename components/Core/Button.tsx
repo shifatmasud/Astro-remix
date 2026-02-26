@@ -267,10 +267,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
     };
   };
 
-  const MotionButton = motion.button as any;
-
   return (
-    <MotionButton
+    <motion.button
       ref={ref}
       style={{
         ...styles,
